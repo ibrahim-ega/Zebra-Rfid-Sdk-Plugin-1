@@ -354,11 +354,7 @@ public class RFIDHandler implements Readers.RFIDReaderEventHandler {
   }
 
    public void writeTag(String sourceEPC, String Password, String targetData, int offset, String type) {
-    Log.d(TAG, "Source " + sourceEPC);
     Log.d(TAG, "WriteTag " + targetData);
-    Log.d(TAG, "Password " + Password);
-    Log.d(TAG, "Offset " + offset);
-    Log.d(TAG, "Type " + type);
     try {
       MEMORY_BANK memory_bank = MEMORY_BANK.MEMORY_BANK_EPC;
       if (type == "EPC") {
@@ -395,6 +391,7 @@ public class RFIDHandler implements Readers.RFIDReaderEventHandler {
   }
 
   public void lockTag(String sourceEPC) {
+    Log.d(TAG, "Source " + sourceEPC);
     try {
       TagAccess tagAccess = new TagAccess();
       TagAccess.LockAccessParams lockAccessParams = tagAccess.new
