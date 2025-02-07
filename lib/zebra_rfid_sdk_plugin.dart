@@ -36,21 +36,29 @@ class ZebraRfidSdkPlugin {
     String targetEPC,
     String type,
   ) async {
-    return _channel.invokeMethod('write', {
-      "sourceEPC": sourceEPC,
-      "rfidPassword": rfidPassword,
-      "targetEPC": targetEPC,
-      "type": type,
-    });
+    try {
+      final result = await _channel.invokeMethod<String>('write', {
+        "sourceEPC": sourceEPC,
+        "rfidPassword": rfidPassword,
+        "targetEPC": targetEPC,
+        "type": type,
+      });
+      return result ?? "Success";
+    } on PlatformException catch (e) {
+      return "Error: ${e.message}";
+    }
   }
 
   ///
-  static Future<dynamic> lockTag(
-    String sourceEPC,
-  ) async {
-    return _channel.invokeMethod('lock', {
-      "sourceEPC": sourceEPC,
-    });
+  static Future<String> lockTag(String sourceEPC) async {
+    try {
+      final result = await _channel.invokeMethod<String>('lock', {
+        "sourceEPC": sourceEPC,
+      });
+      return result ?? "Success";
+    } on PlatformException catch (e) {
+      return "Error: ${e.message}";
+    }
   }
 
   ///connect device

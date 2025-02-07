@@ -390,6 +390,8 @@ public class RFIDHandler implements Readers.RFIDReaderEventHandler {
     } catch (OperationFailureException e) {
       e.printStackTrace();
       result.error("OPERATION_FAILED", "Operation failed: " + e.getMessage(), null);
+    } catch (Exception e) {
+        result.error("UNKNOWN_ERROR", e.getMessage(), null);
     }
   }
 
@@ -411,6 +413,8 @@ public class RFIDHandler implements Readers.RFIDReaderEventHandler {
     } catch (OperationFailureException e) {
         e.printStackTrace();
         result.error("OPERATION_FAILED", "Operation failed: " + e.getMessage(), null);
+    } catch (Exception e) {
+        result.error("UNKNOWN_ERROR", e.getMessage(), null);
     }
   }
 
