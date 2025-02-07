@@ -353,7 +353,7 @@ public class RFIDHandler implements Readers.RFIDReaderEventHandler {
     this.MAX_POWER = new_power;
   }
 
-   public void writeTag(String sourceEPC, String Password, String targetData, int offset, String type) {
+   public void writeTag(String sourceEPC, String Password, String targetData, int offset, String type, Result result) {
     Log.d(TAG, "WriteTag " + targetData);
     try {
       MEMORY_BANK memory_bank = MEMORY_BANK.MEMORY_BANK_EPC;
@@ -383,14 +383,17 @@ public class RFIDHandler implements Readers.RFIDReaderEventHandler {
       // 6th parameter should be true in case of changing EPC ID it self i.e. source and target both is EPC
       boolean useTIDfilter = memory_bank == MEMORY_BANK.MEMORY_BANK_EPC;
       reader.Actions.TagAccess.writeWait(tagId, writeAccessParams, null, tagData, true, useTIDfilter);
+      result.success("Write successful");
     } catch (InvalidUsageException e) {
       e.printStackTrace();
+      result.error("INVALID_USAGE", "Invalid usage: " + e.getMessage(), null);
     } catch (OperationFailureException e) {
       e.printStackTrace();
+      result.error("OPERATION_FAILED", "Operation failed: " + e.getMessage(), null);
     }
   }
 
-  public void lockTag(String sourceEPC) {
+  public void lockTag(String sourceEPC, Result result) {
     Log.d(TAG, "Source " + sourceEPC);
     try {
       TagAccess tagAccess = new TagAccess();
@@ -401,10 +404,13 @@ public class RFIDHandler implements Readers.RFIDReaderEventHandler {
       LOCK_PRIVILEGE.LOCK_PRIVILEGE_PERMA_LOCK);
       lockAccessParams.setAccessPassword(0);
       reader.Actions.TagAccess.lockWait(sourceEPC, lockAccessParams, null);
+      result.success("Lock successful");
     } catch (InvalidUsageException e) {
         e.printStackTrace();
+        result.error("INVALID_USAGE", "Invalid usage: " + e.getMessage(), null);
     } catch (OperationFailureException e) {
         e.printStackTrace();
+        result.error("OPERATION_FAILED", "Operation failed: " + e.getMessage(), null);
     }
   }
 
@@ -412,7 +418,7 @@ public class RFIDHandler implements Readers.RFIDReaderEventHandler {
     @Override
     public void RFIDReaderAppeared(ReaderDevice readerDevice) {
         Log.d(TAG, "RFIDReaderAppeared " + readerDevice.getName());
-//        new ConnectionTask().execute();
+        //new ConnectionTask().execute();
     }
 
     @Override
